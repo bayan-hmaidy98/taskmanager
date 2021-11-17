@@ -14,20 +14,20 @@ import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder>{
 
-    public TaskAdapter(List<Task> allTasks, OnTaskListener onTaskListener) {
+    public TaskAdapter(List<Task> allTasks) {
         this.allTasks = allTasks;
-        this.monTaskListener = onTaskListener;
+
     }
 
     List <Task> allTasks = new ArrayList<>();
     // instantiate the onTaskListener in order to be known by the view holder
-    private OnTaskListener monTaskListener;
+
 
     @NonNull
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_task,parent,false);
-        TaskViewHolder taskViewHolder = new TaskViewHolder(view, monTaskListener);
+        TaskViewHolder taskViewHolder = new TaskViewHolder(view);
         return taskViewHolder;
     }
 
@@ -43,6 +43,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         taskBody.setText(holder.task.body);
         taskState.setText(holder.task.state.toString());
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent taskDetailsIntent = new Intent(v.getContext(), TaskDetails.class); //v.getContext, TaskDetailActivity.class
+                taskDetailsIntent.putExtra("taskName",holder.task.title);
+                taskDetailsIntent.putExtra("taskBody", holder.task.body);
+                taskDetailsIntent.putExtra("taskState", holder.task.state);
+                v.getContext().startActivity(taskDetailsIntent);// v.getContext.startActivity(taskDetailsIntent)
+            }
+        });
+
     }
 
     @Override
@@ -50,32 +61,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         return allTasks.size();
     }
 // to detect the click (position), use OnClickListener interface and implement the method inside it
-    public static class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class TaskViewHolder extends RecyclerView.ViewHolder {
 
         public Task task;
         public View itemView;
-        OnTaskListener onTaskListener;
 
-        public TaskViewHolder(@NonNull View itemView, OnTaskListener onTaskListener) {
+
+        public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
             this.itemView = itemView;
-            this.onTaskListener = onTaskListener;
 
-            // attach OnClickListener to the entire view holder
-            itemView.setOnClickListener(this);
+
         }
 
 
-        @Override
-        public void onClick(View v) {
-            TaskViewHolder holder = null;
-            onTaskListener.onTaskClick(getAdapterPosition());
-            Intent intent = new Intent();
-            intent.putExtra("task", holder.task.title);
-        }
+
     }
-// Send click info to the activity
-    public interface OnTaskListener{
-        void onTaskClick (int position);
-    }
+
 }

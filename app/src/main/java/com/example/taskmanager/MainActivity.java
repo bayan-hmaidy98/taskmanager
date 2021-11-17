@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTaskListener {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         tasksList.add(new Task("No tasks", "Since it's the weekend, no tasks for the today, go and enjoy your time and do whatever you want.", State.NEW));
         RecyclerView recyclerView =findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(tasksList, this));
+        recyclerView.setAdapter(new TaskAdapter(tasksList));
 
 
         settings.setOnClickListener(v -> {
@@ -60,10 +60,5 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         welcome.setText(instName);
     }
 
-    @Override
-    public void onTaskClick(int position) {
-        Intent intent = new Intent(this, TaskDetails.class);
-        startActivity(intent);
 
-    }
 }
