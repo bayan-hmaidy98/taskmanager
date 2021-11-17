@@ -8,8 +8,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTaskListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,9 +24,6 @@ public class MainActivity extends AppCompatActivity {
         Button addTask = (Button) findViewById(R.id.AddTasks);
         Button allTasks = (Button) findViewById(R.id.AllTasks);
         Button settings = (Button) findViewById(R.id.settings);
-        Button task1 = (Button) findViewById(R.id.task1);
-        Button task2 = (Button) findViewById(R.id.task2);
-        Button task3 = (Button) findViewById(R.id.task3);
 
         addTask.setOnClickListener(v -> {
             Intent addTask1 = new Intent(MainActivity.this, AddTask.class);
@@ -33,26 +35,14 @@ public class MainActivity extends AppCompatActivity {
             startActivity(allTasks1);
         });
 
-        task1.setOnClickListener(v -> {
-            Intent goToTaskOne = new Intent(MainActivity.this, TaskDetails.class);
-            String task = task1.getText().toString();
-            goToTaskOne.putExtra("task",task);
-            startActivity(goToTaskOne);
-        });
+        List<Task> tasksList = new ArrayList<>();
+        tasksList.add(new Task("Clean The house", "You need to clean the living room, dinning room, and your bedroom.", State.COMPLETE));
+        tasksList.add(new Task("Finish the assignments", "You have to get done from your reading, lab, code challenge, and learning journal", State.ASSIGNED));
+        tasksList.add(new Task("No tasks", "Since it's the weekend, no tasks for the today, go and enjoy your time and do whatever you want.", State.NEW));
+        RecyclerView recyclerView =findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new TaskAdapter(tasksList, this));
 
-        task2.setOnClickListener(v -> {
-            Intent goToTaskTwo = new Intent(MainActivity.this, TaskDetails.class);
-            String task = task2.getText().toString();
-            goToTaskTwo.putExtra("task",task);
-            startActivity(goToTaskTwo);
-        });
-
-        task3.setOnClickListener(v -> {
-            String task = task3.getText().toString();
-            Intent goToTaskThree = new Intent(MainActivity.this, TaskDetails.class);
-            goToTaskThree.putExtra("task",task);
-            startActivity(goToTaskThree);
-        });
 
         settings.setOnClickListener(v -> {
             Intent goToSettings = new Intent(MainActivity.this, Settings.class);
@@ -68,5 +58,12 @@ public class MainActivity extends AppCompatActivity {
         String instName = sharedPreferences.getString("username","Go to settings and set the username");
         TextView welcome = findViewById(R.id.displayUserName);
         welcome.setText(instName);
+    }
+
+    @Override
+    public void onTaskClick(int position) {
+        Intent intent = new Intent(this, TaskDetails.class);
+        startActivity(intent);
+
     }
 }
