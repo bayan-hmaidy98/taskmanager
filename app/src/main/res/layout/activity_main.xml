@@ -61,56 +61,30 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="userName"
-        app:layout_constraintBottom_toTopOf="@+id/task2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header"
-        app:layout_constraintVertical_bias="0.31" />
-
-    <Button
-        android:id="@+id/task1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:text="Task1"
-        app:layout_constraintBottom_toTopOf="@+id/placeHolder01"
-        app:layout_constraintEnd_toStartOf="@+id/task2"
-        app:layout_constraintHorizontal_bias="0.819"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header"
-        app:layout_constraintVertical_bias="0.437" />
-
-    <Button
-        android:id="@+id/task2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="40dp"
-        android:text="Task2"
-        app:layout_constraintBottom_toTopOf="@+id/placeHolder01"
-        app:layout_constraintEnd_toStartOf="@+id/task3" />
-
-    <Button
-        android:id="@+id/task3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="40dp"
-        android:text="Task3"
-        app:layout_constraintBottom_toTopOf="@+id/placeHolder01"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/header" />
 
     <Button
         android:id="@+id/settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
+        android:layout_marginBottom="12dp"
         android:text="Settings"
-        app:layout_constraintBottom_toTopOf="@+id/task3"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.898"
         app:layout_constraintStart_toEndOf="@+id/header"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.109" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="409dp"
+        android:layout_height="234dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="88dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
