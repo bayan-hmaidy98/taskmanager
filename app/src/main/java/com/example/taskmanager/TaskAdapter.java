@@ -16,7 +16,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     public TaskAdapter(List<Task> allTasks) {
         this.allTasks = allTasks;
-
     }
 
     List <Task> allTasks = new ArrayList<>();

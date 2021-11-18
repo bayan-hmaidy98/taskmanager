@@ -21,4 +21,7 @@ Also the Tsk page would change its title depending on the button's text.
 ## Day 03
 
 Home page displaying data using recycler view
+
 ![Home with tasks](./screenshots/26.png)
+
+![Task page](./screenshots/27.png)
