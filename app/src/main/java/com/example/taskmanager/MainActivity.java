@@ -10,8 +10,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,10 +35,14 @@ public class MainActivity extends AppCompatActivity {
             startActivity(allTasks1);
         });
 
-        List<Task> tasksList = new ArrayList<>();
-        tasksList.add(new Task("Clean The house", "You need to clean the living room, dinning room, and your bedroom.", State.COMPLETE));
-        tasksList.add(new Task("Finish the assignments", "You have to get done from your reading, lab, code challenge, and learning journal", State.ASSIGNED));
-        tasksList.add(new Task("No tasks", "Since it's the weekend, no tasks for the today, go and enjoy your time and do whatever you want.", State.NEW));
+//        List<Task> tasksList = new ArrayList<>();
+//        tasksList.add(new Task("Clean The house", "You need to clean the living room, dinning room, and your bedroom.", State.COMPLETE));
+//        tasksList.add(new Task("Finish the assignments", "You have to get done from your reading, lab, code challenge, and learning journal", State.ASSIGNED));
+//        tasksList.add(new Task("No tasks", "Since it's the weekend, no tasks for the today, go and enjoy your time and do whatever you want.", State.NEW));
+
+        TaskDB db = Room.databaseBuilder(getApplicationContext(), TaskDB.class, "database-name").allowMainThreadQueries().build();
+        TaskDAO taskDAO = db.taskDAO();
+        List<Task> tasksList = taskDAO.getAll();
         RecyclerView recyclerView =findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new TaskAdapter(tasksList));
