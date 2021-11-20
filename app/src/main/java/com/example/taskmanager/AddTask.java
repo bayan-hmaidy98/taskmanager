@@ -20,21 +20,22 @@ public class AddTask extends AppCompatActivity {
 
         Button submitTask = (Button) findViewById(R.id.submitTask);
         EditText addTitle = findViewById(R.id.addTaskTitle);
-        String titles = addTitle.getText().toString();
         EditText addBody = findViewById(R.id.addTaskDescription);
-        String bodies = addBody.getText().toString();
         EditText addState = findViewById(R.id.addTaskState);
-        String states = addState.getText().toString();
-        Task addNewTask = new Task(titles, bodies, State.NEW);
+
+
         submitTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                String titles = addTitle.getText().toString();
+                String states = addState.getText().toString();
+                String bodies = addBody.getText().toString();
+                Task addTask = new Task(titles, bodies, State.NEW);
                 Toast.makeText(getApplicationContext(), "Submitted!", Toast.LENGTH_LONG).show();
-                TaskDB db = Room.databaseBuilder(getApplicationContext(), TaskDB.class, "database-name").build();
-                TaskDAO taskDAO = db.taskDAO();
+                TaskDB myDB = Room.databaseBuilder(getApplicationContext(), TaskDB.class, "tasksDatabase").allowMainThreadQueries().fallbackToDestructiveMigration().build();
+                TaskDAO taskDao = myDB.taskDAO();
 
-                taskDAO.save(addNewTask);
+                taskDao.save(addTask);
                 Intent addIntent = new Intent(AddTask.this, MainActivity.class);
                 startActivity(addIntent);
 

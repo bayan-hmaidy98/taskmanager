@@ -40,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
 //        tasksList.add(new Task("Finish the assignments", "You have to get done from your reading, lab, code challenge, and learning journal", State.ASSIGNED));
 //        tasksList.add(new Task("No tasks", "Since it's the weekend, no tasks for the today, go and enjoy your time and do whatever you want.", State.NEW));
 
-        TaskDB db = Room.databaseBuilder(getApplicationContext(), TaskDB.class, "database-name").allowMainThreadQueries().build();
+        TaskDB db = Room.databaseBuilder(getApplicationContext(), TaskDB.class, "tasksDatabase").allowMainThreadQueries().fallbackToDestructiveMigration().build();
         TaskDAO taskDAO = db.taskDAO();
         List<Task> tasksList = taskDAO.getAll();
-        RecyclerView recyclerView =findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new TaskAdapter(tasksList));
 
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String instName = sharedPreferences.getString("username","Go to settings and set the username");
+        String instName = sharedPreferences.getString("username", "Go to settings and set the username");
         TextView welcome = findViewById(R.id.displayUserName);
         welcome.setText(instName);
     }

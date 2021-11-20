@@ -9,20 +9,20 @@ import java.util.List;
 
 
 @Dao
-    public interface TaskDAO {
-        @Query("SELECT * FROM task")
-        List<Task> getAll();
+public interface TaskDAO {
+    @Query("SELECT * FROM task")
+    List<Task> getAll();
 
-        @Query("SELECT * FROM task WHERE id IN (:userIds)")
-        List<Task> loadAllByIds(int[] userIds);
+    @Query("SELECT * FROM task WHERE id IN (:userIds)")
+    List<Task> loadAllByIds(int[] userIds);
 
-        @Query("SELECT * FROM task WHERE title_col LIKE :first")
-        Task findByName(String first);
+    @Query("SELECT * FROM task WHERE title_col LIKE :first")
+    Task findByName(String first);
 
-        @Insert
-        void save(Task tasks);
+    @Insert
+    void save(Task tasks);
 
-        @Delete
-        void delete(Task user);
+    @Delete
+    void delete(Task user);
 
 }

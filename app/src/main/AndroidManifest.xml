@@ -12,7 +12,7 @@
         <activity
             android:name=".Settings"
             android:exported="false"
-            android:parentActivityName=".MainActivity"  />
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AllTasks"
             android:exported="false"
