@@ -20,8 +20,8 @@ public class Settings extends AppCompatActivity {
 
         findViewById(R.id.submitName).setOnClickListener(view -> {
             TextView text = findViewById(R.id.userName);
-            String name =text.getText().toString();
-            editor.putString("username",name);
+            String name = text.getText().toString();
+            editor.putString("username", name);
             editor.apply();
 
         });

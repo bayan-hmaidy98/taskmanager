@@ -8,8 +8,8 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Task {
 
-    @PrimaryKey
-    public int id;
+    @PrimaryKey(autoGenerate = true)
+    public long id;
     @ColumnInfo(name = "title_col")
     public String title;
     @ColumnInfo(name = "body_col")
@@ -22,7 +22,6 @@ public class Task {
         this.body = body;
         this.state = state;
     }
-
 
 
 }

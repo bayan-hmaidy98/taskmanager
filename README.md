@@ -25,3 +25,16 @@ Home page displaying data using recycler view
 ![Home with tasks](./screenshots/26.png)
 
 ![Task page](./screenshots/27.png)
+## Day 04
+
+Displaying data inserted in the form in Home page and task details
+
+![Home with tasks](./screenshots/31.png)
+
+![Home with tasks](./screenshots/32.png)
+
+![Home with tasks](./screenshots/33.png)
+
+![Home with tasks](./screenshots/34.png)
+
+![Home with tasks](./screenshots/35.png)
