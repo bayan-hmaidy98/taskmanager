@@ -11,13 +11,17 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.AWSDataStorePlugin;
+import com.amplifyframework.datastore.generated.model.Task;
 
+import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,16 +31,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         try {
-            // Add these lines to add the AWSApiPlugin plugins
             Amplify.addPlugin(new AWSApiPlugin());
-            Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.addPlugin(new AWSDataStorePlugin());
             Amplify.configure(getApplicationContext());
-
-            Log.i("MyAmplifyApp", "Initialized Amplify");
-        } catch (AmplifyException error) {
-            Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
+            Log.i("Tutorial", "Initialized Amplify");
+        } catch (AmplifyException failure) {
+            Log.e("Tutorial", "Could not initialize Amplify", failure);
         }
-
+        Amplify.DataStore.observe(Task.class,
+                started -> Log.i("Tutorial", "Observation began."),
+                change -> Log.i("Tutorial", change.item().toString()),
+                failure -> Log.e("Tutorial", "Observation failed.", failure),
+                () -> Log.i("Tutorial", "Observation complete.")
+        );
         Button addTask = (Button) findViewById(R.id.AddTasks);
         Button allTasks = (Button) findViewById(R.id.AllTasks);
         Button settings = (Button) findViewById(R.id.settings);
@@ -56,9 +63,26 @@ public class MainActivity extends AppCompatActivity {
 //        tasksList.add(new Task("Finish the assignments", "You have to get done from your reading, lab, code challenge, and learning journal", State.ASSIGNED));
 //        tasksList.add(new Task("No tasks", "Since it's the weekend, no tasks for the today, go and enjoy your time and do whatever you want.", State.NEW));
 
-        TaskDB db = Room.databaseBuilder(getApplicationContext(), TaskDB.class, "tasksDatabase").allowMainThreadQueries().fallbackToDestructiveMigration().build();
-        TaskDAO taskDAO = db.taskDAO();
-        List<Task> tasksList = taskDAO.getAll();
+//        TaskDB db = Room.databaseBuilder(getApplicationContext(), TaskDB.class, "tasksDatabase").allowMainThreadQueries().fallbackToDestructiveMigration().build();
+//        TaskDAO taskDAO = db.taskDAO();
+//        List<Task> tasksList = taskDAO.getAll();
+
+        List<Task> tasksList = new ArrayList<>();
+
+
+        Amplify.DataStore.query(
+                Task.class,
+                response -> {
+                    while (response.hasNext()){
+                        Task item = response.next();
+                        tasksList.add(item);
+                        Log.i("type of response", item.getId());
+
+                    }
+
+                },
+                error -> Log.e("MyAmplifyApp", "Query failure", error)
+        );
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new TaskAdapter(tasksList));
@@ -78,6 +102,28 @@ public class MainActivity extends AppCompatActivity {
         String instName = sharedPreferences.getString("username", "Go to settings and set the username");
         TextView welcome = findViewById(R.id.displayUserName);
         welcome.setText(instName);
+
+        List<Task> tasksList = new ArrayList<>();
+
+
+        Amplify.DataStore.query(
+                Task.class,
+                response -> {
+                  while (response.hasNext()){
+                     Task item = response.next();
+                     tasksList.add(item);
+                      Log.i("type of response", item.getId());
+
+                  }
+
+                },
+                error -> Log.e("MyAmplifyApp", "Query failure", error)
+        );
+
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new TaskAdapter(tasksList));
     }
 
 
