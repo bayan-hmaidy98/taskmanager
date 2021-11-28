@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
@@ -30,9 +32,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button addTask = (Button) findViewById(R.id.AddTasks);
+        Button allTasks = (Button) findViewById(R.id.AllTasks);
+        Button settings = (Button) findViewById(R.id.settings);
+        Button logIn = (Button) findViewById(R.id.logInButton);
+        Button logOut = (Button) findViewById(R.id.logOutButton);
+
         try {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSDataStorePlugin());
+            // Add this line, to include the Auth plugin.
+            Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(getApplicationContext());
             Log.i("Tutorial", "Initialized Amplify");
         } catch (AmplifyException failure) {
@@ -44,9 +54,40 @@ public class MainActivity extends AppCompatActivity {
                 failure -> Log.e("Tutorial", "Observation failed.", failure),
                 () -> Log.i("Tutorial", "Observation complete.")
         );
-        Button addTask = (Button) findViewById(R.id.AddTasks);
-        Button allTasks = (Button) findViewById(R.id.AllTasks);
-        Button settings = (Button) findViewById(R.id.settings);
+
+        Amplify.Auth.fetchAuthSession(
+                result -> Log.i("AmplifyQuickstart","Result: " + result.toString()),
+                error -> Log.e("AmplifyQuickstart", error.toString())
+        );
+
+
+        logIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Amplify.Auth.signInWithWebUI(
+                        MainActivity.this,
+                        result -> Log.i("AuthQuickStart", result.toString()),
+                        error -> Log.e("AuthQuickStart", error.toString())
+
+
+                );
+//                if()
+            }
+        });
+
+
+
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Amplify.Auth.signOut(
+                        () -> Log.i("AuthQuickstart", "Signed out successfully"),
+                        error -> Log.e("AuthQuickstart", error.toString())
+                );
+            }
+        });
+
+
 
         addTask.setOnClickListener(v -> {
             Intent addTask1 = new Intent(MainActivity.this, AddTask.class);
@@ -87,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new TaskAdapter(tasksList));
 
-
         settings.setOnClickListener(v -> {
             Intent goToSettings = new Intent(MainActivity.this, Settings.class);
             startActivity(goToSettings);
@@ -98,12 +138,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        Button logIn = (Button) findViewById(R.id.logInButton);
+        Button logOut = (Button) findViewById(R.id.logOutButton);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String instName = sharedPreferences.getString("username", "Go to settings and set the username");
         TextView welcome = findViewById(R.id.displayUserName);
         welcome.setText(instName);
 
         List<Task> tasksList = new ArrayList<>();
+
+        Amplify.Auth.fetchAuthSession(
+                result -> {
+                    if (result.isSignedIn()){
+                        logIn.setVisibility(View.INVISIBLE);
+                        welcome.setText(Amplify.Auth.getCurrentUser().getUsername());
+                    }
+                    else logOut.setVisibility(View.INVISIBLE);
+                },
+                error -> Log.e("AmplifyQuickstart", error.toString())
+        );
 
 
         Amplify.DataStore.query(
