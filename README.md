@@ -48,3 +48,12 @@ Today we managed to display data from DynamoDB instead of local DynamoDB
 ![Home with tasks](./screenshots/36.png)
 
 ![Add Tasks](./screenshots/37.png)
+
+
+## Lab 36
+
+Today we managed to make accounts for users.
+
+![Home with tasks](./screenshots/38.png)
+
+![Add Tasks](./screenshots/39.png)
