@@ -68,10 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         MainActivity.this,
                         result -> Log.i("AuthQuickStart", result.toString()),
                         error -> Log.e("AuthQuickStart", error.toString())
-
-
                 );
-//                if()
             }
         });
 

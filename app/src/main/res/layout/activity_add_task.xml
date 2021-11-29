@@ -35,7 +35,7 @@
         app:layout_constraintHorizontal_bias="0.091"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.791" />
 
     <EditText
         android:id="@+id/addTaskDescription"
@@ -52,6 +52,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+
+    <RadioGroup
+        android:layout_width="243dp"
+        android:layout_height="34dp"
+
+
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.747"
+        tools:ignore="MissingConstraints"
+
+
+        >
+
+        <RadioButton
+            android:id="@+id/team1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Team 1" />
+
+        <RadioButton
+            android:id="@+id/team2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Team 2" />
+
+        <RadioButton
+            android:id="@+id/team3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Team 3" />
+    </RadioGroup>
 
     <Button
         android:id="@+id/submitTask"
@@ -88,8 +123,9 @@
         android:text="Name"
         app:layout_constraintBottom_toTopOf="@+id/submitTask"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.079"
+        app:layout_constraintHorizontal_bias="0.124"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.951" />
+        app:layout_constraintVertical_bias="0.839" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
