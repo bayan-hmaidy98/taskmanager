@@ -1,8 +1,10 @@
 package com.example.taskmanager;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -19,13 +21,26 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.Team;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class MainActivity extends AppCompatActivity {
+
+    List<Task> tasksList = new ArrayList<>();
+    TaskAdapter adapter = new TaskAdapter(tasksList);
+    Handler handler = new Handler();
+
+
+    Runnable runnable = new Runnable() {
+        @SuppressLint("NotifyDataSetChanged")
+        @Override
+        public void run() {
+            adapter.notifyDataSetChanged();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +120,6 @@ public class MainActivity extends AppCompatActivity {
 //        TaskDAO taskDAO = db.taskDAO();
 //        List<Task> tasksList = taskDAO.getAll();
 
-        List<Task> tasksList = new ArrayList<>();
-
-
         Amplify.DataStore.query(
                 Task.class,
                 response -> {
@@ -121,9 +133,10 @@ public class MainActivity extends AppCompatActivity {
                 },
                 error -> Log.e("MyAmplifyApp", "Query failure", error)
         );
+
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(tasksList));
+        recyclerView.setAdapter(adapter);
 
         settings.setOnClickListener(v -> {
             Intent goToSettings = new Intent(MainActivity.this, Settings.class);
@@ -143,7 +156,34 @@ public class MainActivity extends AppCompatActivity {
         TextView welcome = findViewById(R.id.displayUserName);
         welcome.setText(instName);
 
-        List<Task> tasksList = new ArrayList<>();
+//        List<Task> tasksList = new ArrayList<>();
+        String team = sharedPreferences.getString("teamName", "Team");
+
+        Amplify.DataStore.query(
+                Team.class, Team.NAME.contains(team),
+                items -> {
+                    while (items.hasNext()) {
+                        Team item = items.next();
+                        Amplify.DataStore.query(
+                                Task.class, Task.TEAM_ID.contains(item.getId()),
+                                response -> {
+                                    while (response.hasNext()){
+                                        Task task = response.next();
+                                        tasksList.add(task);
+                                        Log.i("type of response", task.getId());
+
+                                    }
+                                handler.post(runnable);
+                                },
+                                error -> Log.e("MyAmplifyApp", "Query failure", error)
+                        );
+                        Log.i("Amplify", "Id " + item.getId());
+                    }
+                    handler.post(runnable);
+                },
+                failure -> Log.e("Amplify", "Could not query DataStore", failure)
+        );
+
 
         Amplify.Auth.fetchAuthSession(
                 result -> {
@@ -156,25 +196,6 @@ public class MainActivity extends AppCompatActivity {
                 error -> Log.e("AmplifyQuickstart", error.toString())
         );
 
-
-        Amplify.DataStore.query(
-                Task.class,
-                response -> {
-                  while (response.hasNext()){
-                     Task item = response.next();
-                     tasksList.add(item);
-                      Log.i("type of response", item.getId());
-
-                  }
-
-                },
-                error -> Log.e("MyAmplifyApp", "Query failure", error)
-        );
-
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(tasksList));
     }
 
 

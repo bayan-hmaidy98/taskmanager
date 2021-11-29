@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.Team;
 
 public class AddTask extends AppCompatActivity {
 
@@ -33,30 +34,45 @@ public class AddTask extends AppCompatActivity {
         RadioButton team2 = findViewById(R.id.team2);
         RadioButton team3 = findViewById(R.id.team3);
 
-        String checkTeam = null;
-        if (team1.isChecked()) checkTeam = "Team 1";
-        else if (team2.isChecked()) checkTeam = "Team 2";
-        else if(team3.isChecked()) checkTeam = "Team 3";
+
 
 
         submitTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String checkTeam = null;
+                if (team1.isChecked()) checkTeam = "Team 1";
+                else if (team2.isChecked()) checkTeam = "Team 2";
+                else if(team3.isChecked()) checkTeam = "Team 3";
+
                 String titles = addTitle.getText().toString();
                 String states = addState.getText().toString();
                 String bodies = addBody.getText().toString();
 
-                Task task = Task.builder()
-                        .title(titles)
-                        .body(bodies)
-                        .state("NEW")
-                        .build();
 
-                Amplify.DataStore.save(
-                        task,
-                        success -> Log.i("Amplify", "Saved item: " + success.item().getId()),
-                        error -> Log.e("Amplify", "Could not save item to DataStore", error)
+                Amplify.DataStore.query(
+                        Team.class, Team.NAME.contains(checkTeam),
+                        items -> {
+                            while (items.hasNext()) {
+                                Team item = items.next();
+                                Task task = Task.builder()
+                                        .title(titles)
+                                        .body(bodies)
+                                        .state("NEW").teamId(item.getId())
+                                        .build();
+
+                                Amplify.DataStore.save(
+                                        task,
+                                        success -> Log.i("relation", "Saved item: " + success.item().getTeamId()),
+                                        error -> Log.e("relation", "Could not save item to DataStore", error)
+                                );
+                                Log.i("Amplify", "Id " + item.getId());
+                            }
+                        },
+                        failure -> Log.e("Amplify", "Could not query DataStore", failure)
                 );
+
 
 //
 //                Task addTask = new Task(titles, bodies, State.NEW);
