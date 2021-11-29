@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +28,15 @@ public class AddTask extends AppCompatActivity {
         EditText addTitle = findViewById(R.id.addTaskTitle);
         EditText addBody = findViewById(R.id.addTaskDescription);
         EditText addState = findViewById(R.id.addTaskState);
+
+        RadioButton team1 = findViewById(R.id.team1);
+        RadioButton team2 = findViewById(R.id.team2);
+        RadioButton team3 = findViewById(R.id.team3);
+
+        String checkTeam = null;
+        if (team1.isChecked()) checkTeam = "Team 1";
+        else if (team2.isChecked()) checkTeam = "Team 2";
+        else if(team3.isChecked()) checkTeam = "Team 3";
 
 
         submitTask.setOnClickListener(new View.OnClickListener() {
