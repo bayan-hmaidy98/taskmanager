@@ -54,6 +54,6 @@ Today we managed to display data from DynamoDB instead of local DynamoDB
 
 Today we managed to make accounts for users.
 
-![Home with tasks](./screenshots/38.png)
+![Home with tasks](./screenshots/38.jpg)
 
-![Add Tasks](./screenshots/39.png)
+![Add Tasks](./screenshots/39.jpg)
