@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,15 +14,15 @@ import com.amplifyframework.datastore.generated.model.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> implements Filterable {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
     public TaskAdapter(List<Task> allTasks) {
         this.allTasks = allTasks;
-        allTasksFull = new ArrayList<>(allTasks);
+
     }
 
     List<Task> allTasks = new ArrayList<>();
-    List<Task> allTasksFull = new ArrayList<>();
+
     // instantiate the onTaskListener in order to be known by the view holder
 
 
@@ -66,31 +64,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         return allTasks.size();
     }
 
-    @Override
-    public Filter getFilter() {
-        return tasksFilter;
-    }
 
-    public Filter tasksFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-//            List <Task> filteredList = new ArrayList<>();
-//
-//            if (constraint == null || constraint.length() == 0){
-//                filteredList.addAll(allTasksFull);
-//            }
-//            else {
-//                String filteredTeam =
-//
-//            }
-            return null;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-
-        }
-    };
 
     // to detect the click (position), use OnClickListener interface and implement the method inside it
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
