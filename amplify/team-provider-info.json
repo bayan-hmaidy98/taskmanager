@@ -13,7 +13,8 @@
     },
     "categories": {
       "auth": {
-        "taskmanagerd1c208be": {}
+        "taskmanagerd1c208be": {},
+        "true": {}
       }
     }
   }
